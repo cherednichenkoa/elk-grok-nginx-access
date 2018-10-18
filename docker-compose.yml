@@ -1,0 +1,27 @@
+version: '2.1'
+services:
+    filebeat:
+        build: ./nginx-filebeat/
+        container_name: "filebeat-custom"
+        image: filebeat-custom
+        ports:
+            - 91:91
+        volumes:
+        - /var/log/nginx/:/var/log/nginx/
+        links:
+            - elk
+    elk:
+        build: .
+        image: custom-elk
+        container_name: "elk"
+        volumes:
+        - ./logstash/custom-nginx-access.conf:/etc/logstash/conf.d/11-nginx.conf
+        ports:
+            - 5601:5601
+            - 9200:9200
+            - 5044:5044
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:5601/api/status"]
+            interval: 10s
+            timeout: 2s
+            retries: 5
