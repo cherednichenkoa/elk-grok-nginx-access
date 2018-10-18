@@ -7,4 +7,7 @@ map your logs directory into filebeat
 
 
 start elk with logs forwarding with 
-docker-compose up 
+
+
+$ docker-compose up 
+
